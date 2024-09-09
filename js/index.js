@@ -1,13 +1,6 @@
-navigator.geolocation.getCurrentPosition((position) => {
-    console.log(position);
-    console.log(position.coords.latitude);
-    console.log(position.coords.longitude)
-});
-
 const diaSemana = document.getElementById("dia-semana");
 const dataAtual = document.getElementById("data-atual");
 const horaAtual = document.getElementById("hora-atual");
-const pontoDialog = document.getElementById("dialog-ponto");
 const openDialog = document.getElementById("btn-registrar-ponto");
 
 openDialog.addEventListener("click", register);
@@ -15,10 +8,12 @@ openDialog.addEventListener("click", register);
 diaSemana.textContent = getWeekDay();
 dataAtual.textContent = getCurrentDate();
 
-const dateDialog = document.getElementById("btn-dialog-data");
+const pontoDialog = document.getElementById("dialog-ponto");
+
+const dateDialog = document.getElementById("dialog-data");
 dateDialog.textContent = getCurrentDate();
 
-const hourDialog = document.getElementById("btn-dialog-hora");
+const hourDialog = document.getElementById("dialog-hora");
 hourDialog.textContent = getCurrentTime();
 
 const closeDialog = document.getElementById("btn-dialog-close");
