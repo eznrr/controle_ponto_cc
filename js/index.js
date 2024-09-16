@@ -47,6 +47,10 @@ function saveRegisterLocalStorage(register) {
     localStorage.setItem("register", register);
 }
 
+function getRegisterLocalStorage(key) {
+    
+}
+
 function getUserLocation() {
     navigator.geolocation.getCurrentPosition((position) => {   
         let userLocation = {
