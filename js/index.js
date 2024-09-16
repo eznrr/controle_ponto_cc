@@ -16,10 +16,46 @@ dateDialog.textContent = getCurrentDate();
 const hourDialog = document.getElementById("dialog-hora");
 hourDialog.textContent = getCurrentTime();
 
+const btnDialogEntrada = document.getElementById("btn-dialog-entrada");
+btnDialogEntrada.addEventListener("click", () => {
+    saveRegisterLocalStorage(JSON.stringify(getObjectRegister("entrada")));
+});
+
+const btnDialogSaida = document.getElementById("btn-dialog-saida");
+btnDialogSaida.addEventListener("click", () => {
+    saveRegisterLocalStorage(JSON.stringify(getObjectRegister("saida")));
+});
+
+function getObjectRegister(registerType) {
+    
+    ponto = {
+        "date": getCurrentDate(),
+        "time": getCurrentTime(),
+        "location": getUserLocation(),
+        "id": 1,
+        "type": registerType
+    }
+    return ponto;
+}
+
 const closeDialog = document.getElementById("btn-dialog-close");
 closeDialog.addEventListener("click", () => {
     pontoDialog.close();
 })
+
+function saveRegisterLocalStorage(register) {
+    localStorage.setItem("register", register);
+}
+
+function getUserLocation() {
+    navigator.geolocation.getCurrentPosition((position) => {   
+        let userLocation = {
+            "lat": position.coords.latitude,
+            "long": position.coords.longitude
+        }
+        return userLocation;
+    });
+}
 
 function register() {
     pontoDialog.showModal();
