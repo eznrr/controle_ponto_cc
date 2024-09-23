@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap');
 
 body{
+    background-color: #5465ff;
     margin: 0;
     background-image: url('/images/background.jpg');
     background-size: cover;
@@ -11,58 +12,59 @@ body{
 }
 
 .data-hora{
-    background: rgba(0,0,0,0.3);
-    border-radius: 10px;
-    width: 550px;
-    height: 550px;
+    width: 500px;
+    height: 500px;
     display: flex;
     justify-content: center;
-    align-items: center;
     flex-direction: column;
-    gap: 60px;
+    align-items: center;
 }
 
 .infos{
-    width: 60%;
-    padding: 20px 0 20px;
+    width: 90%;
     display: flex;
     justify-content: center;
-    align-items: center;
     flex-direction: column;
-    border-radius: 10px;
-    background-color: black;
-    font-family: "Roboto Mono", monospace;
-    font-size: 2em;
-    font-weight: bold;
+    align-items: center;
 }
 
 .infos p{
-    width: 86%;
-    padding: 10px 8px;
     margin: 0;
-    color: #136112;
+    font-size: 1.5em;
+    color: #BFD7FF;
+    text-transform: uppercase;
+    font-family: "Roboto Mono", monospace;
 }
 
-#dia-semana, #data-atual{
-    border-bottom: 1px white dashed;
+#hora-atual{
+    margin-top: 20px;
+    font-size: 7em;
+    color: #BFD7FF;
+    font-weight: bold;
+    font-family: "Roboto Mono", monospace;
 }
 
 #btn-registrar-ponto{
-    width: 60%;
-    background-color: #191b1f;
-    padding: 20px 0 20px;
-    border: none;
-    border-radius: 10px;
-    box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+    margin-top: 60px;
+    width: 40%;
+    border: 3px solid #e2fdff;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+    background-color: #e2fdff;
+    color: #5465ff;
     font-family: "Roboto Mono", monospace;
-    font-size: 1.5em;
-    font-weight: bold;
-    color: white;
+    font-size: 1.2em;
+    text-transform: uppercase;
     cursor: pointer;
+    transition: 0.3s ease-in;
 }
 
 #btn-registrar-ponto:hover{
-    background-color: #225280;
+    border: 3px solid #e2fdff;
+    color: #e2fdff;
+    background-color: #5465ff;
+    transition: 0.3s ease-out;
 }
 
 #dialog-ponto::backdrop{
@@ -72,9 +74,9 @@ body{
 #dialog-ponto{
     padding: 0;
     border: none;
-    width: 550px;
-    height: 550px;
-    border-radius: 10px;
+    width: 400px;
+    height: 200px;
+    border-radius: 5px;
 }
 
 .dialog-infos{
@@ -84,71 +86,93 @@ body{
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    gap: 30px;
+    gap: 20px;
 }
 
 .dialog-date-hour{
-    width: 60%;
-    padding: 20px 0 20px;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    border-radius: 10px;
-    background-color: black;
     font-family: "Roboto Mono", monospace;
-    font-size: 2em;
-    font-weight: bold;
 }
 
 .dialog-date-hour p{
-    width: 86%;
-    padding: 10px 8px;
     margin: 0;
-    color: #136112;
 }
 
 #dialog-data{
-    border-bottom: 1px white dashed;
+    font-size: 1.4em;
+    color: #788bff;
 }
 
-#btn-dialog-entrada, #btn-dialog-saida{
-    width: 60%;
-    background-color: #191b1f;
-    padding: 20px 0 20px;
-    border: none;
-    border-radius: 10px;
-    font-family: "Roboto Mono", monospace;
-    font-size: 1.5em;
+#dialog-hora{
+    font-size: 3.5em;
     font-weight: bold;
+    color: #5465ff;
+}
+
+.select{
+    width: 70%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    gap: 5px;
+}
+
+.select select{
+    border-radius: 5px;
+    border: 2px solid #788bff;
+    width: 64%;
+    font-family: "Roboto Mono", monospace;
+    font-weight: bold;
+    font-size: 0.9em;
+    color: #788bff;
+    text-transform: uppercase;
+}
+
+#btn-selecionar-ponto{
+    width: 36%;
+    background-color: #788bff;
+    border: 2px solid #788bff;
+    border-radius: 5px;
+    font-family: "Roboto Mono", monospace;
+    font-size: 0.9em;
     color: white;
+    font-weight: bold;
+    text-transform: uppercase;
     cursor: pointer;
+    transition: 0.3s ease-in;
 }
 
-#btn-dialog-entrada:hover{
-    background-color: #136112;
-}
-
-#btn-dialog-saida:hover{
-    background-color: #a31d1d;
+#btn-selecionar-ponto:hover{
+    background-color: white;
+    color: #5465ff;
+    border: 2px solid #788bff;
+    transition: 0.3s ease-out;
 }
 
 #btn-dialog-close{
     position: absolute;
     top: 0;
     right: 0;
-    width: 50px;
-    height: 50px;
-    border: none;
-    border-radius: 0 10px 0;
-    font-family: "Roboto Mono", monospace;
-    font-size: 1.5em;
-    font-weight: bold;
-    color: black;
+    width: 30px;
+    height: 30px;
+    border: 2px solid #5465ff;
+    border-top: none;
+    border-right: none;
+    border-radius: 0 5px 0;
     cursor: pointer;
+    background-color: white;
+    color: #5465ff;
+    font-weight: bold;
 }
 
 #btn-dialog-close:hover{
+    background-color: #5465ff;
     color: white;
-    background-color: #a31d1d;
+    border: 2px solid #5465ff;
+    border-top: none;
+    border-right: none;
 }
