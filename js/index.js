@@ -16,14 +16,43 @@ dateDialog.textContent = getCurrentDate();
 const hourDialog = document.getElementById("dialog-hora");
 hourDialog.textContent = getCurrentTime();
 
-const btnDialogEntrada = document.getElementById("btn-dialog-entrada");
-btnDialogEntrada.addEventListener("click", () => {
-    saveRegisterLocalStorage(JSON.stringify(getObjectRegister("entrada")));
-});
+const selectRegisterType = document.getElementById("register-type");
 
-const btnDialogSaida = document.getElementById("btn-dialog-saida");
-btnDialogSaida.addEventListener("click", () => {
-    saveRegisterLocalStorage(JSON.stringify(getObjectRegister("saida")));
+function setRegisterType() {
+    let lastType = localStorage.getItem("lastRegisterType");
+    if(lastType == "entrada") {
+        selectRegisterType.value = "intervalo";
+        return;
+    }
+    if(lastType == "intervalo") {
+
+    }
+    if(lastType == "volta-intervalo") {
+        
+    }
+    if(lastType == "saida") {
+    
+    }
+}
+
+const btnDialogRegister = document.getElementById("btn-selecionar-ponto");
+btnDialogRegister.addEventListener("click", () => {
+
+    let register = getObjectRegister(selectRegisterType.value);
+    saveRegisterLocalStorage(register);
+    
+    localStorage.setItem("lastRegister", JSON.stringify(register));
+
+    const alertaSucesso = document.getElementById("alerta-ponto-registrado");
+    alertaSucesso.classList.remove("hidden");
+    alertaSucesso.classList.add("show");
+
+    setTimeout(() => {
+        alertaSucesso.classList.remove("show");
+        alertaSucesso.classList.add("hidden");
+    }, 5000);
+
+    pontoDialog.close();
 });
 
 function getObjectRegister(registerType) {
@@ -43,12 +72,21 @@ closeDialog.addEventListener("click", () => {
     pontoDialog.close();
 })
 
+let registersLocalStorage = getRegisterLocalStorage("register");
+
 function saveRegisterLocalStorage(register) {
-    localStorage.setItem("register", register);
+    registersLocalStorage.push(register);
+    localStorage.setItem("register", JSON.stringify(registersLocalStorage));
 }
 
 function getRegisterLocalStorage(key) {
-    
+    let registers = localStorage.getItem(key);
+
+    if(!registers) {
+        return [];
+    }
+
+    return JSON.parse(registers);
 }
 
 function getUserLocation() {
@@ -62,6 +100,17 @@ function getUserLocation() {
 }
 
 function register() {
+    const dialogUltimoRegistro = document.getElementById("dialog-ultimo-registro");
+    let lastRegister = JSON.parse(localStorage.getItem("lastRegister"));
+
+    if(lastRegister) {
+        let lastDateRegister = lastRegister.date;
+        let lastTimeRegister = lastRegister.time;
+        let lastRegisterType = lastRegister.type;
+
+        dialogUltimoRegistro.textContent = "Último Registro: " + lastDateRegister + " | " + lastTimeRegister + " | " + lastRegisterType;
+    }
+
     pontoDialog.showModal();
 }
 
