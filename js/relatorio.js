@@ -38,14 +38,12 @@ function generateReport() {
         registrosData.forEach((registro, originalIndex) => {
             const registroEl = document.createElement("div");
 
-            // Inclui a localização no relatório, se disponível
             const locationText = registro.location
                 ? ` <p>Localização: Latitude ${registro.location.latitude}, Longitude ${registro.location.longitude}</p>`
                 : " <p>Localização: Não disponível</p>";
 
             registroEl.innerHTML = `<p><strong>TIPO: ${registro.type}</strong></p> <p>${registro.date} | ${registro.time}</p>${locationText}`;
 
-            // Marca visualmente registros com observação, edição ou data passada
             if (registro.observacao) {
                 registroEl.innerHTML += ` Observação: ${registro.observacao}`;
                 registroEl.classList.add("observacao");
@@ -124,7 +122,6 @@ function filterByPeriod(period) {
 
     reportContainer.innerHTML = `<h2>Relatório de Registros (${period === "week" ? "Última Semana" : "Último Mês"})</h2>`;
 
-    // Agrupar registros filtrados por data
     const registrosPorData = filteredRegistros.reduce((acc, registro) => {
         if (!acc[registro.date]) {
             acc[registro.date] = [];
