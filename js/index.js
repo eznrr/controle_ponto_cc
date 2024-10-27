@@ -1,12 +1,16 @@
 const diaSemana = document.getElementById("dia-semana");
-const dataAtual = document.getElementById("data-atual");
-const horaAtual = document.getElementById("hora-atual");
-const openDialog = document.getElementById("btn-registrar-ponto");
+diaSemana.textContent = getWeekDay();
 
+const dataAtual = document.getElementById("data-atual");
+dataAtual.textContent = getCurrentDate();
+
+const horaAtual = document.getElementById("hora-atual");
+
+const openDialog = document.getElementById("btn-registrar-ponto");
 openDialog.addEventListener("click", register);
 
-diaSemana.textContent = getWeekDay();
-dataAtual.textContent = getCurrentDate();
+const closeDialog = document.getElementById("btn-dialog-close");
+closeDialog.addEventListener("click", closeRegister);
 
 const pontoDialog = document.getElementById("dialog-ponto");
 
@@ -20,28 +24,47 @@ const selectRegisterType = document.getElementById("register-type");
 
 function setRegisterType() {
     let lastType = localStorage.getItem("lastRegisterType");
-    if(lastType == "entrada") {
-        selectRegisterType.value = "intervalo";
-        return;
-    }
-    if(lastType == "intervalo") {
 
-    }
-    if(lastType == "volta-intervalo") {
-        
-    }
-    if(lastType == "saida") {
-    
+    switch (lastType) {
+        case "entrada":
+            selectRegisterType.value = "intervalo";
+            break;
+        case "intervalo":
+            selectRegisterType.value = "volta-intervalo";
+            break;
+        case "volta-intervalo":
+            selectRegisterType.value = "saida";
+            break;
+        case "saida":
+            selectRegisterType.value = "entrada";
+            break;
+        default:
+            selectRegisterType.value = "entrada";
+            break;
     }
 }
 
 const btnDialogRegister = document.getElementById("btn-selecionar-ponto");
-btnDialogRegister.addEventListener("click", () => {
+btnDialogRegister.addEventListener("click", async () => {
+    // Evitar registros duplicados em curto intervalo
+    const lastRegister = JSON.parse(localStorage.getItem("lastRegister"));
+    const currentTime = new Date();
+    const lastTime = lastRegister ? new Date(`1970-01-01T${lastRegister.time}:00`) : null;
 
-    let register = getObjectRegister(selectRegisterType.value);
+    if (lastRegister && lastRegister.type === selectRegisterType.value && lastTime) {
+        const diffMinutes = Math.abs((currentTime - lastTime) / 60000);
+        
+        if (diffMinutes < 10) { // Bloqueia registro duplicado dentro de 10 minutos
+            alert("Você já registrou um ponto deste tipo recentemente. Tente novamente mais tarde.");
+            return;
+        }
+    }
+
+    let register = await getObjectRegister(selectRegisterType.value);
     saveRegisterLocalStorage(register);
-    
+
     localStorage.setItem("lastRegister", JSON.stringify(register));
+    localStorage.setItem("lastRegisterType", selectRegisterType.value);
 
     const alertaSucesso = document.getElementById("alerta-ponto-registrado");
     alertaSucesso.classList.remove("hidden");
@@ -55,25 +78,26 @@ btnDialogRegister.addEventListener("click", () => {
     pontoDialog.close();
 });
 
-function getObjectRegister(registerType) {
-    
-    ponto = {
-        "date": getCurrentDate(),
+
+async function getObjectRegister(registerType) {
+    const selectedDate = getSelectedDate();
+    const isPastDate = selectedDate !== getCurrentDate();
+    const observacao = document.getElementById("observacao") ? document.getElementById("observacao").value : "";
+    const location = await getUserLocation();
+
+    return {
+        "date": selectedDate,
         "time": getCurrentTime(),
-        "location": getUserLocation(),
+        "location": location || "Localizacao nao diponivel",
         "id": 1,
-        "type": registerType
-    }
-    return ponto;
+        "type": registerType,
+        "isPast": isPastDate,
+        "observacao": observacao || null,
+        "editado": false
+    };
 }
 
-const closeDialog = document.getElementById("btn-dialog-close");
-closeDialog.addEventListener("click", () => {
-    pontoDialog.close();
-})
-
 let registersLocalStorage = getRegisterLocalStorage("register");
-
 function saveRegisterLocalStorage(register) {
     registersLocalStorage.push(register);
     localStorage.setItem("register", JSON.stringify(registersLocalStorage));
@@ -90,20 +114,26 @@ function getRegisterLocalStorage(key) {
 }
 
 function getUserLocation() {
-    navigator.geolocation.getCurrentPosition((position) => {   
-        let userLocation = {
-            "lat": position.coords.latitude,
-            "long": position.coords.longitude
-        }
-        return userLocation;
+    return new Promise((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition((position) => {
+            let userLocation = {
+                "latitude": position.coords.latitude,
+                "longitude": position.coords.longitude
+            }
+            resolve(userLocation);
+        }, 
+        (error) => {
+            reject("Erro " + error);
+        });
     });
 }
 
+let intervalId = null;
 function register() {
     const dialogUltimoRegistro = document.getElementById("dialog-ultimo-registro");
     let lastRegister = JSON.parse(localStorage.getItem("lastRegister"));
 
-    if(lastRegister) {
+    if (lastRegister) {
         let lastDateRegister = lastRegister.date;
         let lastTimeRegister = lastRegister.time;
         let lastRegisterType = lastRegister.type;
@@ -111,7 +141,26 @@ function register() {
         dialogUltimoRegistro.textContent = "Último Registro: " + lastDateRegister + " | " + lastTimeRegister + " | " + lastRegisterType;
     }
 
+    hourDialog.textContent = getCurrentTime();
+
+    if (!intervalId) {
+        intervalId = setInterval(() => {
+            hourDialog.textContent = getCurrentTime();
+        }, 1000);
+    }
+
+    console.log(intervalId);
+
+    setRegisterType();
     pontoDialog.showModal();
+}
+
+function closeRegister() {
+    if (intervalId) {
+        clearInterval(intervalId); 
+        intervalId = null; 
+    }
+    pontoDialog.close();
 }
 
 function updateContentHour() {
@@ -130,11 +179,33 @@ function getCurrentDate() {
 }
 
 function getWeekDay() {
-    const date = new Date()
-    const day = date.getDay()
+    const date = new Date();
+    const day = date.getDay();
     const daynames = ["Domingo", "Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado"];
-    return daynames[day]
+    return daynames[day];
 }
+
+function setMaxDate() {
+    const dateInput = document.getElementById("select-date");
+    const today = new Date().toISOString().split("T")[0];
+    dateInput.setAttribute("max", today);
+}
+setMaxDate();
+
+function getSelectedDate() {
+    const dateInput = document.getElementById("select-date").value;
+    if (dateInput) {
+        const [year, month, day] = dateInput.split("-");
+        return day + "/" + month + "/" + year;
+    }
+    return getCurrentDate();
+}
+
+const observacaoInput = document.createElement("textarea");
+observacaoInput.id = "observacao";
+observacaoInput.placeholder = "Adicione uma observação (opcional)";
+observacaoInput.rows = 2;
+document.querySelector(".dialog-infos").appendChild(observacaoInput);
 
 updateContentHour();
 setInterval(updateContentHour, 1000);
@@ -142,3 +213,37 @@ setInterval(updateContentHour, 1000);
 console.log(getCurrentTime());
 console.log(getCurrentDate());
 console.log(getWeekDay());
+
+const btnJustificarFalta = document.getElementById("btn-justificar-falta");
+const dialogJustificarFalta = document.getElementById("dialog-justificar-falta");
+const btnEnviarJustificativa = document.getElementById("btn-enviar-justificativa");
+const btnCloseJustificar = document.getElementById("btn-close-justificar");
+
+btnJustificarFalta.addEventListener("click", () => {
+    dialogJustificarFalta.showModal();
+});
+
+btnCloseJustificar.addEventListener("click", () => {
+    dialogJustificarFalta.close();
+});
+
+function saveAbsence(dataAusencia, justificativaTexto, arquivoNome) {
+    const ausencias = JSON.parse(localStorage.getItem("absences")) || [];
+    ausencias.push({ dataAusencia, justificativaTexto, arquivoNome });
+    localStorage.setItem("absences", JSON.stringify(ausencias));
+}
+
+btnEnviarJustificativa.addEventListener("click", () => {
+    const dataAusencia = document.getElementById("data-ausencia").value;
+    const justificativaTexto = document.getElementById("justificativa-texto").value;
+    const uploadArquivo = document.getElementById("upload-arquivo").files[0];
+
+    if (dataAusencia && justificativaTexto) {
+        const arquivoNome = uploadArquivo ? uploadArquivo.name : null;
+        saveAbsence(dataAusencia, justificativaTexto, arquivoNome);
+        alert("Justificativa enviada com sucesso!");
+        dialogJustificarFalta.close();
+    } else {
+        alert("Por favor, preencha todos os campos obrigatórios.");
+    }
+});

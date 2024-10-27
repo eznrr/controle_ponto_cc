@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatório de Registros</title>
+    <link rel="stylesheet" href="/css/relatorio.css">
+</head>
+<body>
+    <div id="filter-container">
+        <button onclick="window.location.href='/index.html'">Voltar</button>
+        <button onclick="window.location.href='/html/relatorio.html'">Limpar Filtro</button>
+        <button id="filter-week">Última Semana</button>
+        <button id="filter-month">Último Mês</button>
+    </div>
+
+    <div id="report-container"></div>
+
+    <dialog id="edit-dialog">
+        <div class="dialog-edit">
+            <h2>Editar Registro</h2>
+            <div class="select">
+                <label for="edit-register-type">Tipo de Registro:</label>
+                <select id="edit-register-type">
+                    <option value="entrada">Entrada</option>
+                    <option value="intervalo">Intervalo</option>
+                    <option value="volta-intervalo">Volta intervalo</option>
+                    <option value="saida">Saída</option>
+                </select>
+            </div>
+
+            <div class="edit">
+                <label for="edit-observacao">Observação:</label>
+                <textarea id="edit-observacao" rows="2" placeholder="Adicione ou edite a observação"></textarea>
+                <input type="hidden" id="edit-index">
+            </div>  
+
+            <div class="btns">
+                <button onclick="saveEdit()">Salvar</button>
+                <button onclick="document.getElementById('edit-dialog').close()">Cancelar</button>
+            </div>
+        </div> 
+    </dialog>
+
+    <script src="/js/relatorio.js"></script>
+</body>
+</html>

@@ -13,15 +13,39 @@
                 <p id="data-atual"></p>
                 <p id="hora-atual"></p>
             </div>
-            <button id="btn-registrar-ponto">Registrar ponto</button>
-        </div>   
-            
+            <div class="btns">
+                <button id="btn-registrar-ponto">Registrar ponto</button>
+                <button id="btn-justificar-falta">Justificar falta</button>
+                <button id="btn-relatorio" onclick="window.location.href='/html/relatorio.html'">Relatório de Registros</button>
+            </div>
+        </div>
+        
+        <dialog id="dialog-justificar-falta">
+            <div class="dialog-justifica">
+                <label for="data-ausencia">Data da ausência:</label>
+                <input type="date" id="data-ausencia" required>
+                
+                <label for="justificativa-texto">Justificativa:</label>
+                <textarea id="justificativa-texto" rows="4" required></textarea>
+
+                <label for="upload-arquivo">Anexar arquivo:</label>
+                <input type="file" id="upload-arquivo" accept=".pdf, .doc, .docx, .jpg, .png" />
+
+                <button id="btn-enviar-justificativa">Enviar justificativa</button>
+            </div>
+            <button id="btn-close-justificar">X</button>
+        </dialog>
+    
 
         <dialog id="dialog-ponto">
             <div class="dialog-infos">
                 <div class="dialog-date-hour">
                     <p id="dialog-data">data</p>
                     <p id="dialog-hora">hora</p>
+                </div>
+                <div class="op-date">
+                    <label for="select-date">Escolha a data (opcional):</label>
+                    <input type="date" id="select-date" max="" required>
                 </div>
                 <div class="select">
                     <select name="register-type" id="register-type">

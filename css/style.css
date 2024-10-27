@@ -3,14 +3,13 @@
 body{
     background-color: #5465ff;
     margin: 0;
-    background-image: url('/images/background.jpg');
-    background-size: cover;
     min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
+/*Estilo home page*/
 .data-hora{
     width: 500px;
     height: 500px;
@@ -30,7 +29,7 @@ body{
 
 .infos p{
     margin: 0;
-    font-size: 1.5em;
+    font-size: 1.8em;
     color: #BFD7FF;
     text-transform: uppercase;
     font-family: "Roboto Mono", monospace;
@@ -38,15 +37,22 @@ body{
 
 #hora-atual{
     margin-top: 20px;
-    font-size: 7em;
+    font-size: 10em;
     color: #BFD7FF;
     font-weight: bold;
     font-family: "Roboto Mono", monospace;
 }
 
-#btn-registrar-ponto{
-    margin-top: 60px;
-    width: 40%;
+.btns{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#btn-registrar-ponto, #btn-justificar-falta, #btn-relatorio{
+    margin-top: 20px;
+    width: 100%;
     border: 3px solid #e2fdff;
     padding: 10px;
     border-radius: 5px;
@@ -60,28 +66,109 @@ body{
     transition: 0.3s ease-in;
 }
 
-#btn-registrar-ponto:hover{
+#btn-registrar-ponto:hover, #btn-justificar-falta:hover, #btn-relatorio:hover{
     border: 3px solid #e2fdff;
     color: #e2fdff;
     background-color: #5465ff;
     transition: 0.3s ease-out;
 }
+/*Fim estilizacao home page*/
 
-#dialog-ponto::backdrop{
+
+/*Comeco estilo para os dialogs*/
+#dialog-ponto::backdrop, #dialog-justificar-falta::backdrop{
     background: rgba(0, 0, 0, 0.5);
 }
 
-#dialog-ponto{
+#dialog-ponto, #dialog-justificar-falta{
     padding: 0;
     border: none;
-    width: 400px;
-    min-height: 250px;
+    width: 600px;
+    min-height: 300px;
     border-radius: 5px;
 }
 
-.dialog-infos{
+#btn-dialog-close, #btn-close-justificar{
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 30px;
+    height: 30px;
+    border: 2px solid #5465ff;
+    border-top: none;
+    border-right: none;
+    border-radius: 0 5px 0;
+    cursor: pointer;
+    background-color: white;
+    color: #5465ff;
+    font-weight: bold;
+}
+
+#btn-dialog-close:hover, #btn-close-justificar:hover{
+    background-color: #5465ff;
+    color: white;
+    border: 2px solid #5465ff;
+    border-top: none;
+    border-right: none;
+}
+/*Fim estilizacao dos dialogs*/
+
+/*Comeco estilo dialog justificar falta*/
+.dialog-justifica {
+    padding: 50px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.dialog-justifica label{
+    font-family: "Roboto Mono", monospace;
+    font-size: 1em;
+}
+
+.dialog-justifica input{
+    border: 2px solid #788bff;
+    border-radius: 5px;
+    font-family: "Roboto Mono", monospace;
+    padding: 10px;
+}
+
+.dialog-justifica textarea{
+    padding: 8px;
+    resize: none;
+    width: 96%;
+    min-height: 120px;
+    border: 2px solid #788bff;
+    border-radius: 5px;
+    font-size: 1.3em;
+    color: #5465ff;
+}
+
+#btn-enviar-justificativa {
+    padding: 12px;
     width: 100%;
-    height: 100%;
+    background-color: #788bff;
+    border: none;
+    border-radius: 5px;
+    font-family: "Roboto Mono", monospace;
+    font-size: 0.9em;
+    color: white;
+    font-weight: bold;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: 0.3s ease-in;
+}
+
+#btn-enviar-justificativa:hover {
+    background-color: #5465ff;
+    color: white;
+    transition: 0.3s ease-out;
+}
+/*Fim estilizacao dialog justificar falta*/
+
+/*Comeco estilo dialog ponto*/
+.dialog-infos{
+    padding: 50px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -112,30 +199,53 @@ body{
     color: #5465ff;
 }
 
-.select{
-    width: 70%;
+.op-date{
+    width: 100%;
     display: flex;
     justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.op-date label{
+    font-family: "Roboto Mono", monospace;
+    font-size: 1em;
+}
+
+.op-date input{
+    width: 30%;
+    font-size: 1em;
+    border: 2px solid #788bff;
+    border-radius: 5px;
+    font-family: "Roboto Mono", monospace;
+}
+
+.select{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
     align-items: center;
     flex-direction: row;
     gap: 5px;
 }
 
 .select select{
+    padding: 8px;
     border-radius: 5px;
     border: 2px solid #788bff;
-    width: 64%;
+    width: 70%;
     font-family: "Roboto Mono", monospace;
     font-weight: bold;
-    font-size: 0.9em;
+    font-size: 1em;
     color: #788bff;
     text-transform: uppercase;
 }
 
 #btn-selecionar-ponto{
-    width: 36%;
+    padding: 12px;
+    width: 30%;
     background-color: #788bff;
-    border: 2px solid #788bff;
+    border: none;
     border-radius: 5px;
     font-family: "Roboto Mono", monospace;
     font-size: 0.9em;
@@ -147,36 +257,32 @@ body{
 }
 
 #btn-selecionar-ponto:hover{
-    background-color: white;
-    color: #5465ff;
-    border: 2px solid #788bff;
+    background-color: #5465ff;
+    color: white;
     transition: 0.3s ease-out;
 }
 
-#btn-dialog-close{
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 30px;
-    height: 30px;
-    border: 2px solid #5465ff;
-    border-top: none;
-    border-right: none;
-    border-radius: 0 5px 0;
-    cursor: pointer;
-    background-color: white;
+#observacao{
+    padding: 10px;
+    resize: none;
+    width: 96%;
+    min-height: 120px;
+    border: 2px solid #788bff;
+    border-radius: 5px;
+    font-size: 1.5em;
     color: #5465ff;
-    font-weight: bold;
 }
 
-#btn-dialog-close:hover{
-    background-color: #5465ff;
-    color: white;
-    border: 2px solid #5465ff;
-    border-top: none;
-    border-right: none;
+#dialog-ultimo-registro{
+    display: flex;
+    justify-content: center;
+    font-family: "Roboto Mono", monospace;
+    font-size: 0.9em;
+    text-transform: uppercase;
 }
+/*Fim estilizacao dialog ponto*/
 
+/*Comeco estilo alerta*/
 #alerta-ponto-registrado {
     position: fixed;
     bottom: 10px;
@@ -193,3 +299,4 @@ body{
 .show {
     opacity: 1;
 }
+/*Fim estilizacao alerta*/
