@@ -207,6 +207,10 @@ observacaoInput.placeholder = "Adicione uma observação (opcional)";
 observacaoInput.rows = 2;
 document.querySelector(".dialog-infos").appendChild(observacaoInput);
 
+observacaoInput.addEventListener("input", () => {
+    observacaoInput.value = observacaoInput.value.replace(/<[^>]*>/g, ""); // Remove tags HTML
+});
+
 updateContentHour();
 setInterval(updateContentHour, 1000);
 
